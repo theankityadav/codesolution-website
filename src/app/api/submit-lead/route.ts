@@ -11,6 +11,8 @@ interface LeadData {
   description: string;
 }
 
+const SHEETDB_API_URL = "https://sheetdb.io/api/v1/wedzyfdcsfqc0";
+
 export async function POST(request: NextRequest) {
   try {
     const data: LeadData = await request.json();
@@ -32,32 +34,38 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get the Google Apps Script Web App URL from environment variable
-    const googleScriptUrl = process.env.GOOGLE_SCRIPT_URL;
+    const timestamp = new Date().toISOString();
 
-    if (googleScriptUrl) {
-      // Send data to Google Sheets via Apps Script
-      const response = await fetch(googleScriptUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    // Send to SheetDB (Google Sheets)
+    const response = await fetch(SHEETDB_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        data: {
+          Timestamp: timestamp,
+          Name: data.name,
+          Email: data.email,
+          Phone: data.phone,
+          Company: data.company,
+          Service: data.service,
+          Budget: data.budget || "",
+          Timeline: data.timeline || "",
+          Description: data.description,
         },
-        body: JSON.stringify({
-          ...data,
-          timestamp: new Date().toISOString(),
-        }),
-      });
+      }),
+    });
 
-      if (!response.ok) {
-        console.error("Failed to submit to Google Sheets");
-      }
-    } else {
-      // Log the lead data if Google Script URL is not configured
-      console.log("Lead received (Google Sheets not configured):", {
-        ...data,
-        timestamp: new Date().toISOString(),
-      });
+    if (!response.ok) {
+      console.error("SheetDB error:", await response.text());
+      return NextResponse.json(
+        { error: "Failed to submit lead" },
+        { status: 500 }
+      );
     }
+
+    console.log("Lead submitted successfully:", { ...data, timestamp });
 
     return NextResponse.json(
       { success: true, message: "Lead submitted successfully" },
