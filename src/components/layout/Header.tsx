@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, Code2 } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { NAV_LINKS, COMPANY_NAME } from "@/lib/constants";
 import Container from "@/components/ui/Container";
@@ -18,10 +19,7 @@ export default function Header() {
       <Container>
         <nav className="flex items-center justify-between h-16 md:h-20">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-              <Code2 className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-xl font-bold text-gray-900">{COMPANY_NAME}</span>
+            <Image src="/logo.png" alt={COMPANY_NAME} width={140} height={40} className="h-10 w-auto" priority />
           </Link>
 
           <div className="hidden md:flex items-center gap-8">

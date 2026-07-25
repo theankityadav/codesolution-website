@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Code2, Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
+import Image from "next/image";
 import Container from "@/components/ui/Container";
 import { COMPANY_NAME, NAV_LINKS, SERVICES } from "@/lib/constants";
 
@@ -12,10 +13,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           <div>
             <Link href="/" className="flex items-center gap-2 mb-6">
-              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                <Code2 className="w-6 h-6 text-white" />
-              </div>
-              <span className="text-xl font-bold text-white">{COMPANY_NAME}</span>
+              <Image src="/footer_logo.png" alt={COMPANY_NAME} width={140} height={40} className="h-10 w-auto" />
             </Link>
             <p className="text-gray-400 mb-6">
               Delivering cutting-edge technology solutions that transform businesses and drive growth.
