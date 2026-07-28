@@ -19,7 +19,7 @@ export default function Header() {
       <Container>
         <nav className="flex items-center justify-between h-16 md:h-20">
           <Link href="/" className="flex items-center gap-2">
-            <Image src="/logo.png" alt={COMPANY_NAME} width={140} height={40} className="h-10 w-auto" priority />
+            <Image src="/logo_main.png" alt={COMPANY_NAME} width={130} height={80} style={{ width: "130px", height: "80px" }} priority />
           </Link>
 
           <div className="hidden md:flex items-center gap-8">

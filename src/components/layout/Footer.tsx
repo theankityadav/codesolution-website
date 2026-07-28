@@ -13,7 +13,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           <div>
             <Link href="/" className="flex items-center gap-2 mb-6">
-              <Image src="/footer_logo.png" alt={COMPANY_NAME} width={140} height={40} className="h-10 w-auto" />
+              <Image src="/logo_footer.png" alt={COMPANY_NAME} width={130} height={80} style={{ width: "130px", height: "80px" }} />
             </Link>
             <p className="text-gray-400 mb-6">
               Delivering cutting-edge technology solutions that transform businesses and drive growth.

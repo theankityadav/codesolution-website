@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   title: "CodeSolution - End-to-End Digital Solutions",
   description:
     "CodeSolution delivers cutting-edge technology solutions including UI/UX Design, Frontend & Backend Development, DevOps, and Custom Software Development.",
+  icons: {
+    icon: "/icon.png",
+  },
   keywords: [
     "web development",
     "software development",
