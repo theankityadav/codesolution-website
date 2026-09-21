@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail } from "lucide-react";
 import Image from "next/image";
 import Container from "@/components/ui/Container";
 import { COMPANY_NAME, NAV_LINKS, SERVICES } from "@/lib/constants";
@@ -84,20 +84,10 @@ export default function Footer() {
           <div>
             <h3 className="text-white font-semibold text-lg mb-6">Contact Us</h3>
             <ul className="space-y-4">
-              <li className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
-                <span>123 Tech Street, Silicon Valley, CA 94000</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Phone className="w-5 h-5 text-blue-400 flex-shrink-0" />
-                <a href="tel:+1234567890" className="hover:text-blue-400 transition-colors">
-                  +1 (234) 567-890
-                </a>
-              </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-5 h-5 text-blue-400 flex-shrink-0" />
-                <a href="mailto:hello@codesolution.com" className="hover:text-blue-400 transition-colors">
-                  hello@codesolution.com
+                <a href="mailto:info@codesolution.in" className="hover:text-blue-400 transition-colors">
+                  info@codesolution.in
                 </a>
               </li>
             </ul>

@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Clock, Send, CheckCircle } from "lucide-react";
+import { Mail, Clock, Send, CheckCircle } from "lucide-react";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
 import { SERVICE_OPTIONS, BUDGET_OPTIONS, TIMELINE_OPTIONS } from "@/lib/constants";
@@ -18,7 +18,23 @@ interface FormData {
   description: string;
 }
 
+function generateCaptcha() {
+  const a = Math.floor(Math.random() * 10) + 1;
+  const b = Math.floor(Math.random() * 10) + 1;
+  return { a, b, answer: a + b };
+}
+
 export default function ContactPage() {
+  const [captcha, setCaptcha] = useState(generateCaptcha);
+  const [captchaInput, setCaptchaInput] = useState("");
+  const [captchaError, setCaptchaError] = useState(false);
+
+  const refreshCaptcha = useCallback(() => {
+    setCaptcha(generateCaptcha());
+    setCaptchaInput("");
+    setCaptchaError(false);
+  }, []);
+
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
@@ -42,6 +58,13 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (parseInt(captchaInput, 10) !== captcha.answer) {
+      setCaptchaError(true);
+      refreshCaptcha();
+      return;
+    }
+    setCaptchaError(false);
     setIsSubmitting(true);
     setError("");
 
@@ -69,6 +92,7 @@ export default function ContactPage() {
         timeline: "",
         description: "",
       });
+      refreshCaptcha();
     } catch (err) {
       setError("Something went wrong. Please try again or contact us directly.");
     } finally {
@@ -118,39 +142,11 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold text-gray-900">Email</h3>
                     <a
-                      href="mailto:hello@codesolution.com"
+                      href="mailto:info@codesolution.in"
                       className="text-gray-600 hover:text-blue-600 transition-colors"
                     >
-                      hello@codesolution.com
+                      info@codesolution.in
                     </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Phone className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900">Phone</h3>
-                    <a
-                      href="tel:+1234567890"
-                      className="text-gray-600 hover:text-blue-600 transition-colors"
-                    >
-                      +1 (234) 567-890
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <MapPin className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900">Address</h3>
-                    <p className="text-gray-600">
-                      123 Tech Street<br />
-                      Silicon Valley, CA 94000
-                    </p>
                   </div>
                 </div>
 
@@ -371,7 +367,38 @@ export default function ContactPage() {
                     </div>
                   </div>
 
-                  <div className="mt-8">
+                  <div className="mt-6">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Security Check *
+                    </label>
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-3 px-4 py-3 bg-white border border-gray-300 rounded-lg select-none">
+                        <span className="text-lg font-semibold text-gray-900 font-mono">
+                          {captcha.a} + {captcha.b} =
+                        </span>
+                      </div>
+                      <input
+                        type="number"
+                        required
+                        value={captchaInput}
+                        onChange={(e) => { setCaptchaInput(e.target.value); setCaptchaError(false); }}
+                        className={`w-24 px-4 py-3 rounded-lg border focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-center text-lg font-semibold ${captchaError ? "border-red-400 bg-red-50" : "border-gray-300"}`}
+                        placeholder="?"
+                      />
+                      <button
+                        type="button"
+                        onClick={refreshCaptcha}
+                        className="text-sm text-blue-600 hover:text-blue-800 transition-colors underline"
+                      >
+                        New question
+                      </button>
+                    </div>
+                    {captchaError && (
+                      <p className="mt-2 text-sm text-red-600">Incorrect answer. Please try again.</p>
+                    )}
+                  </div>
+
+                  <div className="mt-6">
                     <Button
                       type="submit"
                       size="lg"
