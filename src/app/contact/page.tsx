@@ -71,8 +71,8 @@ export default function ContactPage() {
     e.preventDefault();
 
     if (!captcha || parseInt(captchaInput, 10) !== captcha.answer) {
-      setCaptchaError(true);
       refreshCaptcha();
+      setCaptchaError(true);
       return;
     }
     setCaptchaError(false);
