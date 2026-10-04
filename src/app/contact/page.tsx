@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Mail, Clock, Send, CheckCircle } from "lucide-react";
 import Container from "@/components/ui/Container";
@@ -18,14 +18,21 @@ interface FormData {
   description: string;
 }
 
-function generateCaptcha() {
+interface Captcha {
+  a: number;
+  b: number;
+  answer: number;
+}
+
+function generateCaptcha(): Captcha {
   const a = Math.floor(Math.random() * 10) + 1;
   const b = Math.floor(Math.random() * 10) + 1;
   return { a, b, answer: a + b };
 }
 
 export default function ContactPage() {
-  const [captcha, setCaptcha] = useState(generateCaptcha);
+  // Generated after mount so server and client render the same markup.
+  const [captcha, setCaptcha] = useState<Captcha | null>(null);
   const [captchaInput, setCaptchaInput] = useState("");
   const [captchaError, setCaptchaError] = useState(false);
 
@@ -34,6 +41,10 @@ export default function ContactPage() {
     setCaptchaInput("");
     setCaptchaError(false);
   }, []);
+
+  useEffect(() => {
+    refreshCaptcha();
+  }, [refreshCaptcha]);
 
   const [formData, setFormData] = useState<FormData>({
     name: "",
@@ -59,7 +70,7 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (parseInt(captchaInput, 10) !== captcha.answer) {
+    if (!captcha || parseInt(captchaInput, 10) !== captcha.answer) {
       setCaptchaError(true);
       refreshCaptcha();
       return;
@@ -374,7 +385,7 @@ export default function ContactPage() {
                     <div className="flex items-center gap-4">
                       <div className="flex items-center gap-3 px-4 py-3 bg-white border border-gray-300 rounded-lg select-none">
                         <span className="text-lg font-semibold text-gray-900 font-mono">
-                          {captcha.a} + {captcha.b} =
+                          {captcha ? `${captcha.a} + ${captcha.b} =` : "\u00a0"}
                         </span>
                       </div>
                       <input
